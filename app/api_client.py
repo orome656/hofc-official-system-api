@@ -16,7 +16,7 @@ class ApiClient():
 
     async def get_actus(self):
         async with aiohttp.ClientSession() as session:
-            async with session.get(f'{self.base_url}/wp/v2/posts') as response:
+            async with session.get(f'{self.base_url}/wp/v2/posts?_embed') as response:
 
                 print("Status:", response.status)
                 print("Content-type:", response.headers['content-type'])
