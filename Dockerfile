@@ -4,3 +4,4 @@ COPY ./app /app
 
 RUN pip install aiohttp
 RUN pip install pydantic
+RUN pip install pydash
