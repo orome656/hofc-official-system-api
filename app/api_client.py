@@ -9,7 +9,8 @@ class ApiClient():
             "id": wp_actu['id'],
             "titre": wp_actu['title']['rendered'],
             "contenu": wp_actu['content']['rendered'],
-            "date_creation": wp_actu['date_gmt']+"Z"
+            "date_creation": wp_actu['date_gmt']+"Z",
+            "image_url": wp_actu['_embedded']['wp:featuredmedia'][0]['source_url']
         } for wp_actu in wp_actus]
 
     async def get_actus(self):
