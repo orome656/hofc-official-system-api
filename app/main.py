@@ -20,5 +20,7 @@ app.add_middleware(
 api_client = ApiClient()
 
 @app.get("/actualites")
-async def get_actus():
-    return await api_client.get_actus()
+async def get_actus(limit: int = 100, offset: int = 0):
+    if limit > 100:
+        limit = 100
+    return await api_client.get_actus(limit=limit, offset=offset)
