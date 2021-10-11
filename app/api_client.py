@@ -1,7 +1,8 @@
 import aiohttp
 import base64
 import pydash
-import time
+import json
+import os
 
 class ApiClient():
     def __init__(self):
@@ -19,17 +20,19 @@ class ApiClient():
             } for wp_actu in wp_actus]
 
     async def get_actus(self, limit=100, offset=0):
-        has_results = True
-        api_results = []
-        between_calls_wait_time = 5
-        page_size = 100 if limit > 100 else limit
-        async with aiohttp.ClientSession() as session:
+        page_size = 10 if limit > 10 else limit
 
-                async with session.get(f'{self.base_url}/wp/v2/posts?_embed&per_page={page_size}&offset={offset}') as response:
+        if os.environ.get('ENV', 'PROD') == 'DEV':
+            with os.open('../mocks/mock.json') as content:
+                return json.loads(content)
+        else:
+            async with aiohttp.ClientSession() as session:
 
-                    print("Status:", response.status)
-                    print("Content-type:", response.headers['content-type'])
-                    if response.status == 200:
-                        return await self._map_actus(await response.json())
-                    else:
-                        return []
+                    async with session.get(f'{self.base_url}/wp/v2/posts?_embed&per_page={page_size}&offset={offset}') as response:
+
+                        print("Status:", response.status)
+                        print("Content-type:", response.headers['content-type'])
+                        if response.status == 200:
+                            return await self._map_actus(await response.json())
+                        else:
+                            return []
